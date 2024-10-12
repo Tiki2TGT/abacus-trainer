@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.soroban {
+    display: inline-block;
+}
+
+.top-row, .bottom-row {
+    display: flex;
+}
+
+/* General column and grid styling */
+.column {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Align beads at the bottom */
+    width: 50px;
+    height: 200px;
+    margin: 5px;
+}
+
+/* Style for bead (with image) */
+.bead {
+    background-image: url('path/to/bead-image.png'); /* Replace with actual image path */
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 40px;
+    width: 100%;
+    margin: 2px 0;
+}
+
+/* Style for space (with image or transparent) */
+.space {
+    background-image: url('path/to/space-image.png'); /* Replace with space image or leave transparent */
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 40px;
+    width: 100%;
+    margin: 2px 0;
+}
+
+.bead {
+    background-color: #000;
+}
+
+.space {
+    background-color: #fff;
+}
+
+.divider {
+    height: 10px;
+    background-color: #000;
+    margin: 5px 0;
+}
