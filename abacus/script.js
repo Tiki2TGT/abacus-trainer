@@ -1,23 +1,23 @@
 //document.addEventListener("DOMContentLoaded", () => {
+    //random constants
     const columns = document.querySelectorAll('.column'); // Replace '.column' with the appropriate selector
     let columnCount = 0;
-
     for (let i = 0; i < columns.length; i++) {
     columnCount++;
     }
-    
     const columnamount = columnCount/2
     let topValues = Array(columnamount).fill(0); // Default top row values (0)
     let bottomValues = Array(columnamount).fill(0); // Default bottom row values (0)
     let mousedown = false;
-
+//mouseup, mousedown detection
 document.addEventListener('mousedown', () => {
     mousedown = true;
 });
-
 document.addEventListener('mouseup', () => {
     mousedown = false; 
 });
+
+// Handle click events for the grid (top row)
 document.querySelectorAll('.top-row .column').forEach((column, colIndex) => {
     column.querySelectorAll('.space, .bead').forEach((grid, rowIndex) => {
         grid.addEventListener('mouseover', (event) => {
@@ -40,7 +40,6 @@ document.querySelectorAll('.top-row .column').forEach((column, colIndex) => {
         });
     });
 });
-
 // Handle click events for the grid (bottom row)
 document.querySelectorAll('.bottom-row .column').forEach((column, colIndex) => {
     column.querySelectorAll('.space, .bead').forEach((grid, rowIndex) => {
@@ -114,7 +113,6 @@ document.querySelectorAll('.bottom-row .column').forEach((column, colIndex) => {
         let textvalues = combinedValues;
         console.log(textvalues)
         while (textvalues[0] < 1) {
-            console.log('test')
             textvalues.shift()
         }
 
@@ -122,59 +120,57 @@ document.querySelectorAll('.bottom-row .column').forEach((column, colIndex) => {
         numberInput.value = textvalues.join('');
     }
 
-    // Get references to the input box and the button
-const numberInput = document.getElementById('numberInput');
-let lastinput = ''
-// Add an event listener to the button
-numberInput.addEventListener('input', () => {
-    console.log(numberInput.value);
-    let inputValue = parseInt(numberInput.value, 10); // Get the input value as an integer
-    if (!isNaN(inputValue) && inputValue >= 0 && numberInput.value.length <= columnamount) { // Check if the input is a valid non-negative number
-        updateAbacus(inputValue); // Call the function to update the abacus
-        lastinput = inputValue;
-    } else if (numberInput.value === ''){
-        lastinput = 0
-    } else {
-        alert('Please enter a valid number.'); // Alert for invalid input
-        numberInput.value = lastinput;
-    }
-});
-
-//numberInput.addEventListener('input', () => {
-//    console.log('Text box value has changed:', numberInput.value);
-//  });
-//
-// Function to update the abacus based on the input value
-function updateAbacus(value) {  
-    let arrayValue = Array.from(String(value), Number);
-    while (arrayValue.length < columnamount) {
-        arrayValue.unshift(0)
-    }
-
-    for (let i = 0; i < arrayValue.length; i++) {
-        if (arrayValue[i] >= 5 ) {
-            updateTopRow(i,0);
-            arrayValue[i] = arrayValue[i]-5;
+    //number input to abacus code
+    const numberInput = document.getElementById('numberInput');
+    const resetbutton = document.getElementById('resetbutton');
+    let lastinput = ''
+    numberInput.addEventListener('input', () => {
+        console.log(numberInput.value);
+        let inputValue = parseInt(numberInput.value, 10); // Get the input value as an integer
+        if (!isNaN(inputValue) && inputValue >= 0 && numberInput.value.length <= columnamount) { // Check if the input is a valid non-negative number
+            updateAbacus(inputValue); // Call the function to update the abacus
+            lastinput = inputValue;
+        } else if (numberInput.value === ''){
+            lastinput = 0
         } else {
-            updateTopRow(i,1)
-        };
-        if (arrayValue[i] <= 4) {
-            updateBottomRow(i, arrayValue[i])
-            arrayValue[i] = 0
-        } else {
-            updateBottomRow(i,0)
+            alert('Please enter a valid number.'); // Alert for invalid input
+            numberInput.value = lastinput;
         }
-    }
-    
-    let combinedValues = topValues.map((topVal, colIndex) => {
-        return topVal + bottomValues[colIndex];
+    });
+    resetbutton.addEventListener('click', () => {
+        updateAbacus(0);
+        numberInput.value=0;
     });
 
-    // Display the combined array as a string
-    document.getElementById('valueDisplay2').textContent = topValues.join(' ');
-    document.getElementById('valueDisplay3').textContent = bottomValues.join(' ');
-    document.getElementById('valueDisplay').textContent = combinedValues.join(' ');
+    function updateAbacus(value) {  
+        let arrayValue = Array.from(String(value), Number);
+        
+        // Fill with leading zeros
+        while (arrayValue.length < columnamount) {
+            arrayValue.unshift(0);
+        }
+    
+        arrayValue.forEach((digit, i) => {
+            let top = digit >= 5 ? 5 : 0;
+            let bottom = digit >= 5 ? digit - 5 : digit;
+            
+            updateTopRow(i, top === 5 ? 0 : 1);
+            updateBottomRow(i, bottom);
+        });
+        
+        let combinedValues = topValues.map((topVal, colIndex) => {
+            return topVal + bottomValues[colIndex];
+        });
 
-}
+        // Display the combined array as a string
+        document.getElementById('valueDisplay2').textContent = topValues.join(' ');
+        document.getElementById('valueDisplay3').textContent = bottomValues.join(' ');
+        document.getElementById('valueDisplay').textContent = combinedValues.join(' ');
+
+    }
+
+    //hotkey time
+    
+
 
 //});
